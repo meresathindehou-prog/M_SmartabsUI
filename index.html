@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TabsFlow — SaaS Dashboard</title>
+<meta name="description" content="TabsFlow — Premium SaaS dashboard with SmartTabs UI, subscription management and analytics."/>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<!-- App CSS -->
+<link rel="stylesheet" href="app.css"/>
+</head>
+<body>
+
+<!-- Toast container (global) -->
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-label="Notifications"></div>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 1: LOGIN
+══════════════════════════════════════════════════════ -->
+<div class="screen auth-screen" id="screen-login">
+  <div class="auth-bg">
+    <div class="auth-grid"></div>
+    <div class="auth-orb auth-orb-1"></div>
+    <div class="auth-orb auth-orb-2"></div>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><i class="fas fa-table-columns"></i></div>
+      <div>
+        <div class="auth-logo-name">Tabs<em>Flow</em></div>
+        <div style="font-size:.62rem;color:var(--t3);font-family:var(--f-mono);letter-spacing:.06em">v2.4.0 · SaaS Dashboard</div>
+      </div>
+    </div>
+
+    <h2 class="auth-title">Welcome back</h2>
+    <p class="auth-subtitle">Sign in to your account to continue.</p>
+
+    <form class="auth-form" id="loginForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="login-email">Email address</label>
+        <input class="form-input" type="email" id="login-email" placeholder="you@company.com" autocomplete="email" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="login-password">Password</label>
+        <div class="password-wrap">
+          <input class="form-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required/>
+          <button type="button" class="password-toggle" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <div id="login-error" class="form-error" style="display:none"></div>
+      <button type="submit" id="login-btn" class="btn btn-jade btn-full btn-lg">
+        Sign in <i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <div class="divider" style="margin-top:1.25rem">or</div>
+
+    <!-- Demo accounts quickfill -->
+    <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem">
+      <button class="btn btn-ghost btn-full" onclick="document.getElementById('login-email').value='demo@tabsflow.com';document.getElementById('login-password').value='demo123456'" style="font-size:.8rem">
+        <i class="fas fa-user"></i> Fill demo user credentials
+      </button>
+      <button id="btn-demo-admin" class="btn btn-ghost btn-full" style="font-size:.8rem">
+        <i class="fas fa-shield-halved"></i> Sign in as Admin
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      Don't have an account? <a id="go-signup">Create one free →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 2: SIGNUP
+══════════════════════════════════════════════════════ -->
+<div class="screen auth-screen" id="screen-signup">
+  <div class="auth-bg">
+    <div class="auth-grid"></div>
+    <div class="auth-orb auth-orb-1"></div>
+    <div class="auth-orb auth-orb-2"></div>
+  </div>
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><i class="fas fa-table-columns"></i></div>
+      <div>
+        <div class="auth-logo-name">Tabs<em>Flow</em></div>
+        <div style="font-size:.62rem;color:var(--t3);font-family:var(--f-mono);letter-spacing:.06em">Start free · Upgrade anytime</div>
+      </div>
+    </div>
+
+    <h2 class="auth-title">Create your account</h2>
+    <p class="auth-subtitle">Free forever. Upgrade when you're ready.</p>
+
+    <form class="auth-form" id="signupForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="signup-name">Full name</label>
+        <input class="form-input" type="text" id="signup-name" placeholder="Mérès ATHINDEHOU" autocomplete="name" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signup-email">Email address</label>
+        <input class="form-input" type="email" id="signup-email" placeholder="you@company.com" autocomplete="email" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="signup-password">Password</label>
+        <div class="password-wrap">
+          <input class="form-input" type="password" id="signup-password" placeholder="At least 6 characters" autocomplete="new-password" required/>
+          <button type="button" class="password-toggle" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+        </div>
+        <div class="form-hint">Min. 6 characters. Your data is stored locally.</div>
+      </div>
+      <div id="signup-error" class="form-error" style="display:none"></div>
+      <button type="submit" id="signup-btn" class="btn btn-jade btn-full btn-lg">
+        Create account <i class="fas fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <div class="auth-footer" style="margin-top:1.25rem">
+      Already have an account? <a id="go-login">Sign in →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 3: APP SHELL
+══════════════════════════════════════════════════════ -->
+<div class="screen app-screen" id="screen-app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+
+    <!-- Logo -->
+    <div class="sidebar-header">
+      <div class="sb-logo"><i class="fas fa-table-columns"></i></div>
+      <div>
+        <div class="sb-name">Tabs<em>Flow</em></div>
+        <div class="sb-version">v2.4.0</div>
+      </div>
+    </div>
+
+    <!-- Current user -->
+    <div class="sidebar-user">
+      <div class="sb-avatar sb-avatar-jade" id="sb-avatar-el">
+        <span id="sb-avatar-initials">MA</span>
+      </div>
+      <div class="sb-user-info">
+        <div class="sb-user-name" id="sb-user-name">Loading…</div>
+        <div class="sb-user-plan" id="sb-user-plan">Free Plan</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" aria-label="App sections">
+      <div class="nav-section-label">Main</div>
+
+      <div class="nav-item active" data-page="dashboard" role="menuitem" tabindex="0">
+        <i class="fas fa-chart-line" aria-hidden="true"></i>
+        Dashboard
+      </div>
+
+      <div class="nav-section-label">Features</div>
+
+      <div class="nav-item" data-page="upgrade" role="menuitem" tabindex="0">
+        <i class="fas fa-bolt" aria-hidden="true"></i>
+        Upgrade
+        <span class="nav-badge badge badge-jade">PRO</span>
+      </div>
+
+      <div class="nav-section-label">Account</div>
+
+      <div class="nav-item" data-page="profile" role="menuitem" tabindex="0">
+        <i class="fas fa-user-circle" aria-hidden="true"></i>
+        Profile
+      </div>
+
+      <div class="nav-item" id="nav-admin" data-page="admin" role="menuitem" tabindex="0" style="display:none">
+        <i class="fas fa-shield-halved" aria-hidden="true"></i>
+        Admin Panel
+        <span class="nav-badge badge badge-rose">ADMIN</span>
+      </div>
+
+    </nav>
+
+    <!-- Bottom: subscription status + logout -->
+    <div class="sidebar-bottom">
+      <!-- Sub status -->
+      <div class="sub-status-card">
+        <div class="ssc-label">Subscription</div>
+        <div class="ssc-status">
+          <div class="ssc-status-dot dot-free" id="sb-sub-dot"></div>
+          <span id="sb-sub-status">Free Plan</span>
+        </div>
+      </div>
+
+      <!-- Upgrade CTA (hidden if premium) -->
+      <button id="sb-upgrade-cta" class="btn btn-jade btn-full btn-sm" data-action="go-upgrade" style="margin-bottom:.5rem">
+        <i class="fas fa-bolt"></i> Upgrade to Premium
+      </button>
+
+      <button id="btn-logout" class="btn btn-ghost btn-full btn-sm">
+        <i class="fas fa-right-from-bracket"></i> Sign out
+      </button>
+    </div>
+
+  </aside><!-- /sidebar -->
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="app-content">
+
+    <!-- Top header -->
+    <header class="app-header" role="banner">
+      <div class="header-left">
+        <!-- Mobile burger -->
+        <button class="burger-btn" id="burger-btn" aria-label="Open navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+        <!-- Breadcrumb -->
+        <nav class="page-breadcrumb" aria-label="Breadcrumb">
+          <span>TabsFlow</span>
+          <span class="crumb-sep"><i class="fas fa-chevron-right"></i></span>
+          <span class="crumb-current">Dashboard</span>
+        </nav>
+      </div>
+
+      <div class="header-right">
+        <!-- Demo premium toggle (testing) -->
+        <button id="btn-demo-premium" class="btn btn-ghost btn-sm" title="Activate Demo Premium" aria-label="Activate demo premium for testing">
+          <i class="fas fa-wand-magic-sparkles"></i>
+          <span style="display:none" class="sm-show">Demo Premium</span>
+        </button>
+
+        <button class="header-icon-btn" aria-label="Notifications" title="Notifications">
+          <i class="fas fa-bell"></i>
+        </button>
+
+        <div style="font-size:.8rem;font-weight:500;color:var(--t1)" id="header-user-name">—</div>
+      </div>
+    </header>
+
+    <!-- ── PAGE: DASHBOARD ── -->
+    <main class="page-main" id="page-dashboard" role="main" aria-labelledby="dash-heading">
+      <div class="page-title-row">
+        <div class="page-title-block">
+          <div class="page-title" id="dash-heading">Dashboard</div>
+          <div class="page-subtitle">Welcome back. Here's what's happening today.</div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center">
+          <span class="badge badge-jade">Live data</span>
+          <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Export</button>
+        </div>
+      </div>
+
+      <!-- KPI Row -->
+      <div class="kpi-row" role="list" aria-label="Key metrics">
+        <article class="kpi-card" role="listitem">
+          <div class="kpi-icon" style="background:var(--jade-dim);border:1px solid var(--jade-bd);color:var(--jade)"><i class="fas fa-arrow-trend-up"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Total Revenue</div>
+            <div class="kpi-value" id="kpi-revenue">$0</div>
+            <div class="kpi-delta delta-up"><i class="fas fa-arrow-up"></i> 18.2% vs last month</div>
+          </div>
+        </article>
+        <article class="kpi-card" role="listitem">
+          <div class="kpi-icon" style="background:var(--sapphire-dim);border:1px solid var(--sapphire-bd);color:var(--sapphire)"><i class="fas fa-users"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Active Users</div>
+            <div class="kpi-value" id="kpi-users">0</div>
+            <div class="kpi-delta delta-up"><i class="fas fa-arrow-up"></i> 6.1% vs last month</div>
+          </div>
+        </article>
+        <article class="kpi-card" role="listitem">
+          <div class="kpi-icon" style="background:var(--amber-dim);border:1px solid var(--amber-bd);color:var(--amber)"><i class="fas fa-file-invoice-dollar"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">New Orders</div>
+            <div class="kpi-value" id="kpi-orders">0</div>
+            <div class="kpi-delta delta-down"><i class="fas fa-arrow-down"></i> 2.4% vs last month</div>
+          </div>
+        </article>
+        <article class="kpi-card" role="listitem">
+          <div class="kpi-icon" style="background:var(--rose-dim);border:1px solid var(--rose-bd);color:var(--rose)"><i class="fas fa-percent"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Conv. Rate</div>
+            <div class="kpi-value" id="kpi-rate">0%</div>
+            <div class="kpi-delta delta-up"><i class="fas fa-arrow-up"></i> 0.3% vs last month</div>
+          </div>
+        </article>
+      </div>
+
+      <!-- SmartTabs UI Component -->
+      <div class="tabs-container" id="dashboard-tabs" role="region" aria-label="Dashboard tabs">
+        <!-- Tab navigation -->
+        <div class="tabs-nav" role="tablist" aria-label="Dashboard sections">
+          <div class="tab-indicator" id="tab-indicator" aria-hidden="true"></div>
+
+          <button class="tab-btn" role="tab" aria-selected="true"  aria-controls="tab-panel-overview"   tabindex="0"  data-tab-index="0">
+            <i class="fas fa-chart-area"></i> Overview
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-panel-analytics"  tabindex="-1" data-tab-index="1">
+            <i class="fas fa-chart-bar"></i> Analytics
+            <i class="fas fa-lock tab-lock-icon" aria-label="Premium feature"></i>
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-panel-users"      tabindex="-1" data-tab-index="2">
+            <i class="fas fa-users"></i> Users
+            <i class="fas fa-lock tab-lock-icon" aria-label="Premium feature"></i>
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-panel-revenue"    tabindex="-1" data-tab-index="3">
+            <i class="fas fa-coins"></i> Revenue
+            <i class="fas fa-lock tab-lock-icon" aria-label="Premium feature"></i>
+          </button>
+        </div>
+
+        <!-- Tab panels -->
+        <div class="tabs-body">
+
+          <!-- Panel 0: Overview (free) -->
+          <div class="tab-panel active" id="tab-panel-overview" role="tabpanel" aria-labelledby="tab-0" tabindex="0">
+            <div class="panel-content">
+              <!-- Revenue sparkline chart -->
+              <div class="chart-card" style="margin-bottom:1.25rem">
+                <div class="card-header">
+                  <div>
+                    <div class="card-title"><i class="fas fa-chart-area" style="color:var(--jade)"></i> Revenue Trend</div>
+                    <div class="card-sub">Last 30 days · October 2024</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:.75rem">
+                    <div style="font-size:.72rem;color:var(--t2);display:flex;align-items:center;gap:.3rem">
+                      <span style="width:8px;height:8px;border-radius:50%;background:var(--jade);display:inline-block;box-shadow:0 0 6px var(--jade)"></span>Revenue
+                    </div>
+                    <span class="badge badge-jade">+18.2%</span>
+                  </div>
+                </div>
+                <div class="sparkline-container">
+                  <svg class="sparkline-svg" id="sparkline-overview" viewBox="0 0 400 70" preserveAspectRatio="none" role="img" aria-label="Revenue trend over last 30 days">
+                    <defs>
+                      <linearGradient id="sg-jade" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#0ecfaa" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#0ecfaa" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <path class="spark-area" fill="url(#sg-jade)"/>
+                    <path class="spark-line" fill="none" stroke="#0ecfaa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:.5rem;font-family:var(--f-mono);font-size:.62rem;color:var(--t3)">
+                  <span>Oct 1</span><span>Oct 8</span><span>Oct 15</span><span>Oct 22</span><span>Oct 29</span>
+                </div>
+              </div>
+
+              <!-- Bar chart -->
+              <div class="chart-card">
+                <div class="card-header">
+                  <div>
+                    <div class="card-title"><i class="fas fa-chart-column" style="color:var(--sapphire)"></i> Monthly Revenue</div>
+                    <div class="card-sub">Q3 → Q4 2024</div>
+                  </div>
+                  <span class="badge badge-saph">Quarterly view</span>
+                </div>
+                <div style="display:flex;align-items:flex-end;gap:.75rem;height:110px;padding-top:.5rem">
+                  <div class="bc-col">
+                    <div class="bc-val">$78k</div>
+                    <div class="bc-bar-fill bc-bar" style="height:0;transition:height .6s .1s var(--ease)" id="bc1"></div>
+                    <div class="bc-label">Jul</div>
+                  </div>
+                  <div class="bc-col">
+                    <div class="bc-val">$98k</div>
+                    <div class="bc-bar-fill bc-bar" style="height:0;transition:height .6s .2s var(--ease)" id="bc2"></div>
+                    <div class="bc-label">Aug</div>
+                  </div>
+                  <div class="bc-col">
+                    <div class="bc-val">$85k</div>
+                    <div class="bc-bar-fill bc-bar" style="height:0;transition:height .6s .3s var(--ease)" id="bc3"></div>
+                    <div class="bc-label">Sep</div>
+                  </div>
+                  <div class="bc-col">
+                    <div class="bc-val" style="color:var(--jade)">$143k</div>
+                    <div class="bc-bar-fill bc-bar jade" style="height:0;transition:height .6s .4s var(--ease)" id="bc4"></div>
+                    <div class="bc-label" style="color:var(--jade)">Oct ↑</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /panel-overview -->
+
+          <!-- Panel 1: Analytics (premium lock) -->
+          <div class="tab-panel" id="tab-panel-analytics" role="tabpanel" aria-labelledby="tab-1" tabindex="0">
+            <div class="lock-overlay" aria-live="polite">
+              <div class="lock-icon-big"><i class="fas fa-lock"></i></div>
+              <div class="lock-title">Premium Feature</div>
+              <p class="lock-desc">Unlock advanced analytics with traffic sources, conversion funnels, and real-time data.</p>
+              <button class="btn btn-jade" data-action="go-upgrade"><i class="fas fa-bolt"></i> Upgrade to Premium</button>
+            </div>
+            <div class="panel-content" aria-hidden="true">
+              <!-- Blurred placeholder content -->
+              <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:1rem">
+                <div class="chart-card">
+                  <div class="card-title" style="margin-bottom:1rem">Traffic Sources</div>
+                  <div style="display:flex;flex-direction:column;gap:.6rem">
+                    <div style="display:flex;align-items:center;gap:.8rem;font-size:.8rem">
+                      <span style="flex:1;color:var(--t2)">Organic Search</span>
+                      <div style="flex:3;height:6px;background:var(--ink-4);border-radius:6px;overflow:hidden">
+                        <div class="an-bar-fill" data-w="72%" style="height:100%;background:var(--jade);border-radius:6px"></div>
+                      </div>
+                      <span style="color:var(--t3);min-width:30px">72%</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:.8rem;font-size:.8rem">
+                      <span style="flex:1;color:var(--t2)">Direct</span>
+                      <div style="flex:3;height:6px;background:var(--ink-4);border-radius:6px;overflow:hidden">
+                        <div class="an-bar-fill" data-w="51%" style="height:100%;background:var(--sapphire);border-radius:6px"></div>
+                      </div>
+                      <span style="color:var(--t3);min-width:30px">51%</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:.8rem;font-size:.8rem">
+                      <span style="flex:1;color:var(--t2)">Referral</span>
+                      <div style="flex:3;height:6px;background:var(--ink-4);border-radius:6px;overflow:hidden">
+                        <div class="an-bar-fill" data-w="34%" style="height:100%;background:var(--amber);border-radius:6px"></div>
+                      </div>
+                      <span style="color:var(--t3);min-width:30px">34%</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:.8rem;font-size:.8rem">
+                      <span style="flex:1;color:var(--t2)">Social</span>
+                      <div style="flex:3;height:6px;background:var(--ink-4);border-radius:6px;overflow:hidden">
+                        <div class="an-bar-fill" data-w="18%" style="height:100%;background:var(--rose);border-radius:6px"></div>
+                      </div>
+                      <span style="color:var(--t3);min-width:30px">18%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="chart-card">
+                  <div class="card-title" style="margin-bottom:.8rem">Top Countries</div>
+                  <div style="display:flex;flex-direction:column;gap:.6rem">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">🇺🇸 <span style="flex:1;color:var(--t2)">United States</span><span style="color:var(--jade)">38%</span></div>
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">🇬🇧 <span style="flex:1;color:var(--t2)">United Kingdom</span><span style="color:var(--jade)">22%</span></div>
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">🇩🇪 <span style="flex:1;color:var(--t2)">Germany</span><span style="color:var(--jade)">14%</span></div>
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">🇫🇷 <span style="flex:1;color:var(--t2)">France</span><span style="color:var(--jade)">11%</span></div>
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">🇧🇯 <span style="flex:1;color:var(--t2)">Bénin</span><span style="color:var(--jade)">5%</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /panel-analytics -->
+
+          <!-- Panel 2: Users (premium lock) -->
+          <div class="tab-panel" id="tab-panel-users" role="tabpanel" aria-labelledby="tab-2" tabindex="0">
+            <div class="lock-overlay" aria-live="polite">
+              <div class="lock-icon-big"><i class="fas fa-lock"></i></div>
+              <div class="lock-title">Premium Feature</div>
+              <p class="lock-desc">Manage your customers, view their plans and activity with full user management.</p>
+              <button class="btn btn-jade" data-action="go-upgrade"><i class="fas fa-bolt"></i> Upgrade to Premium</button>
+            </div>
+            <div class="panel-content" aria-hidden="true">
+              <div class="chart-card">
+                <div class="card-header">
+                  <div class="card-title"><i class="fas fa-users"></i> Recent Customers</div>
+                  <button class="btn btn-ghost btn-sm"><i class="fas fa-download"></i> Export</button>
+                </div>
+                <div class="data-table-wrap">
+                  <table class="data-table" role="table" aria-label="Customers">
+                    <thead>
+                      <tr>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Plan</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Revenue</th>
+                        <th scope="col">Joined</th>
+                      </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                      <!-- Filled by JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div><!-- /panel-users -->
+
+          <!-- Panel 3: Revenue (premium lock) -->
+          <div class="tab-panel" id="tab-panel-revenue" role="tabpanel" aria-labelledby="tab-3" tabindex="0">
+            <div class="lock-overlay" aria-live="polite">
+              <div class="lock-icon-big"><i class="fas fa-lock"></i></div>
+              <div class="lock-title">Premium Feature</div>
+              <p class="lock-desc">Full revenue breakdown, MRR tracking, churn analysis and financial projections.</p>
+              <button class="btn btn-jade" data-action="go-upgrade"><i class="fas fa-bolt"></i> Upgrade to Premium</button>
+            </div>
+            <div class="panel-content" aria-hidden="true">
+              <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:1.25rem;align-items:start">
+                <div class="chart-card">
+                  <div style="font-family:var(--f-display);font-size:2rem;font-weight:800;color:var(--jade);letter-spacing:-.05em;margin-bottom:.25rem">$142,580</div>
+                  <div style="font-size:.75rem;color:var(--t3);margin-bottom:1.25rem">Total Revenue · Oct 2024</div>
+                  <div style="display:flex;flex-direction:column;gap:.6rem">
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">
+                      <span style="width:8px;height:8px;border-radius:50%;background:var(--jade);flex-shrink:0"></span>
+                      <span style="flex:1;color:var(--t2)">Subscriptions</span><strong style="color:var(--t1)">$98,400</strong>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">
+                      <span style="width:8px;height:8px;border-radius:50%;background:var(--sapphire);flex-shrink:0"></span>
+                      <span style="flex:1;color:var(--t2)">One-time</span><strong style="color:var(--t1)">$31,820</strong>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:.6rem;font-size:.82rem">
+                      <span style="width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0"></span>
+                      <span style="flex:1;color:var(--t2)">Add-ons</span><strong style="color:var(--t1)">$12,360</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="chart-card">
+                  <div class="card-title" style="margin-bottom:1rem"><i class="fas fa-chart-line"></i> Revenue Sparkline</div>
+                  <div class="sparkline-container">
+                    <svg class="sparkline-svg" id="sparkline-revenue" viewBox="0 0 400 70" preserveAspectRatio="none" role="img" aria-label="Revenue trend chart">
+                      <defs>
+                        <linearGradient id="sg-saph" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="#4f7cff" stop-opacity="0.3"/>
+                          <stop offset="100%" stop-color="#4f7cff" stop-opacity="0"/>
+                        </linearGradient>
+                      </defs>
+                      <path class="spark-area" fill="url(#sg-saph)"/>
+                      <path class="spark-line" fill="none" stroke="#4f7cff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /panel-revenue -->
+
+        </div><!-- /tabs-body -->
+      </div><!-- /tabs-container -->
+    </main><!-- /page-dashboard -->
+
+    <!-- ── PAGE: UPGRADE ── -->
+    <main class="page-main hidden" id="page-upgrade" role="main" aria-labelledby="upgrade-heading">
+
+      <!-- Already premium message -->
+      <div id="upgrade-premium-msg" style="display:none;background:var(--jade-dim);border:1px solid var(--jade-bd);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:2rem;align-items:center;gap:.75rem;font-size:.9rem;color:var(--jade)">
+        <i class="fas fa-check-circle" style="font-size:1.1rem"></i>
+        <div><strong>You already have Premium!</strong> All features are unlocked. Enjoy TabsFlow.</div>
+      </div>
+
+      <div class="upgrade-hero">
+        <div class="badge badge-jade" style="margin:0 auto 1rem">✦ Premium Plans</div>
+        <h1 id="upgrade-heading">Unlock the full <span class="gradient-text">TabsFlow</span> experience</h1>
+        <p style="margin-top:.75rem">Get unrestricted access to advanced analytics, user management, revenue insights, and priority support. One simple price.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free plan -->
+        <div class="pricing-card">
+          <div class="plan-name">Free</div>
+          <div class="plan-price">0 <span>FCFA / month</span></div>
+          <div class="plan-desc">Perfect for getting started.</div>
+          <div class="plan-features">
+            <div class="plan-feature"><i class="fas fa-check"></i> Dashboard overview</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Basic KPI metrics</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Revenue trend chart</div>
+            <div class="plan-feature disabled"><i class="fas fa-times"></i> Advanced Analytics</div>
+            <div class="plan-feature disabled"><i class="fas fa-times"></i> User Management</div>
+            <div class="plan-feature disabled"><i class="fas fa-times"></i> Revenue breakdown</div>
+            <div class="plan-feature disabled"><i class="fas fa-times"></i> Priority support</div>
+          </div>
+          <button class="btn btn-ghost btn-full" disabled>Current plan</button>
+        </div>
+
+        <!-- Premium plan (featured) -->
+        <div class="pricing-card featured">
+          <div class="plan-name">Premium</div>
+          <div class="plan-price">5,000 <span>FCFA / month</span></div>
+          <div class="plan-desc">Everything you need to run and grow.</div>
+          <div class="plan-features">
+            <div class="plan-feature"><i class="fas fa-check"></i> Everything in Free</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Advanced Analytics &amp; Traffic</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Full User Management</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Revenue &amp; MRR breakdown</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Export data (CSV/PDF)</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Priority email support</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> API access</div>
+          </div>
+          <button id="btn-get-premium" class="btn btn-jade btn-full btn-lg">
+            <i class="fas fa-bolt"></i> Get Premium — 5,000 FCFA/mo
+          </button>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price" style="font-size:1.4rem">Custom</div>
+          <div class="plan-desc">For teams and organizations.</div>
+          <div class="plan-features">
+            <div class="plan-feature"><i class="fas fa-check"></i> Everything in Premium</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Unlimited team members</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Custom integrations</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> Dedicated account manager</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> SLA guarantee</div>
+            <div class="plan-feature"><i class="fas fa-check"></i> White-label option</div>
+          </div>
+          <a href="mailto:meresathindehou@gmail.com" class="btn btn-ghost btn-full">
+            <i class="fas fa-envelope"></i> Contact sales
+          </a>
+        </div>
+      </div>
+
+      <!-- Guarantee -->
+      <div style="text-align:center;padding:1.5rem;background:var(--ink-3);border:1px solid var(--bd);border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--t2)"><i class="fas fa-shield-halved" style="color:var(--jade)"></i> Secure payment via MTN Mobile Money</div>
+        <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--t2)"><i class="fas fa-rotate-left" style="color:var(--jade)"></i> Cancel anytime</div>
+        <div style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--t2)"><i class="fas fa-headset" style="color:var(--jade)"></i> 24h support response</div>
+      </div>
+    </main><!-- /page-upgrade -->
+
+    <!-- ── PAGE: PAYMENT ── -->
+    <main class="page-main hidden" id="page-payment" role="main" aria-labelledby="payment-heading">
+      <div class="page-title-row">
+        <div class="page-title-block">
+          <div class="page-title" id="payment-heading">Complete Payment</div>
+          <div class="page-subtitle">Send 5,000 FCFA via MTN Mobile Money and activate your Premium subscription.</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="Router.showPage('upgrade')">
+          <i class="fas fa-arrow-left"></i> Back to plans
+        </button>
+      </div>
+
+      <div class="payment-card">
+        <div class="payment-header">
+          <div style="width:56px;height:56px;border-radius:18px;background:var(--amber-dim);border:1px solid var(--amber-bd);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:1.5rem">📱</div>
+          <div class="payment-amount">5,000 <span class="payment-currency">FCFA</span></div>
+          <div style="font-size:.8rem;color:var(--t3);margin-top:.25rem">Monthly Premium Subscription</div>
+        </div>
+
+        <!-- Reference code -->
+        <div class="payment-ref">
+          <div>
+            <div class="ref-label">Payment reference (include in transfer)</div>
+            <div class="ref-code" id="payment-ref-code">TF-XXXXXXXX</div>
+          </div>
+          <button class="ref-copy-btn" id="btn-copy-ref" aria-label="Copy reference code">
+            <i class="fas fa-copy"></i> Copy
+          </button>
+        </div>
+
+        <!-- MTN instructions -->
+        <div class="mtn-instruction">
+          <div style="font-family:var(--f-mono);font-size:.65rem;letter-spacing:.1em;color:var(--amber);margin-bottom:.85rem;text-transform:uppercase">MTN Mobile Money · Payment Instructions</div>
+          <div class="mtn-step">
+            <div class="step-num">1</div>
+            <div>Dial <strong style="color:var(--amber)">*165#</strong> on your MTN phone or open your Mobile Money app</div>
+          </div>
+          <div class="mtn-step">
+            <div class="step-num">2</div>
+            <div>Select <strong>"Transfer / Envoyer de l'argent"</strong></div>
+          </div>
+          <div class="mtn-step">
+            <div class="step-num">3</div>
+            <div>Send <strong>5,000 FCFA</strong> to: <div class="mtn-number">+229 01 62 05 15 12</div><div style="font-size:.78rem;color:var(--t2);margin-top:.2rem">Beneficiary: <strong style="color:var(--t1)">Mérès ATHINDEHOU</strong></div></div>
+          </div>
+          <div class="mtn-step">
+            <div class="step-num">4</div>
+            <div>In the note/reason field, enter your payment reference: <strong style="color:var(--amber)" id="pay-ref-reminder">TF-XXXXXXXX</strong></div>
+          </div>
+        </div>
+
+        <!-- Phone number field -->
+        <div class="form-group" style="margin-bottom:1.25rem">
+          <label class="form-label" for="pay-phone">Your MTN number (optional — for admin confirmation)</label>
+          <input class="form-input" type="tel" id="pay-phone" placeholder="+229 XX XX XX XX"/>
+          <div class="form-hint">We'll use this to verify your payment faster.</div>
+        </div>
+
+        <!-- Status -->
+        <div id="payment-status-label" style="font-family:var(--f-mono);font-size:.78rem;color:var(--t3);text-align:center;margin-bottom:1rem"></div>
+
+        <!-- Submit button -->
+        <button id="btn-paid" class="btn btn-jade btn-full btn-lg">
+          <i class="fas fa-check-circle"></i> I have paid — Notify admin
+        </button>
+
+        <!-- [MOMO_API] ── In production, this button would trigger:
+             1. Create a payment request via MTN MoMo API
+             2. Show a loading state while waiting for user to confirm on phone
+             3. Poll the payment status endpoint
+             4. Auto-activate subscription on success
+             See app.js → Subs.submitPaymentRequest() for integration guide -->
+
+        <div style="text-align:center;margin-top:1rem;font-size:.75rem;color:var(--t3)">
+          <i class="fas fa-clock"></i> Average approval time: 1–4 hours during business hours
+        </div>
+      </div>
+    </main><!-- /page-payment -->
+
+    <!-- ── PAGE: PROFILE ── -->
+    <main class="page-main hidden" id="page-profile" role="main" aria-labelledby="profile-heading">
+      <div class="page-title-row">
+        <div class="page-title-block">
+          <div class="page-title" id="profile-heading">My Profile</div>
+          <div class="page-subtitle">Manage your account settings and subscription.</div>
+        </div>
+      </div>
+
+      <div class="profile-layout">
+        <!-- Profile card -->
+        <div class="profile-card">
+          <div class="profile-avatar-big">
+            <span id="profile-avatar-initials">MA</span>
+            <div class="online-dot" aria-hidden="true"></div>
+          </div>
+          <div class="profile-name" id="prof-display-name">—</div>
+          <div class="profile-email" id="prof-display-email">—</div>
+
+          <div style="margin:.75rem 0">
+            <span class="badge badge-jade" id="prof-plan">Free</span>
+          </div>
+
+          <div style="font-size:.75rem;color:var(--t3);margin-bottom:.25rem">Subscription expires:</div>
+          <div style="font-size:.82rem;color:var(--t2)" id="prof-expires">N/A</div>
+
+          <div class="profile-stats">
+            <div class="pstat"><div class="pstat-val">7</div><div class="pstat-key">Days active</div></div>
+            <div class="pstat"><div class="pstat-val">3</div><div class="pstat-key">Reports</div></div>
+            <div class="pstat"><div class="pstat-val">∞</div><div class="pstat-key">Potential</div></div>
+          </div>
+
+          <button class="btn btn-jade btn-full btn-sm" style="margin-top:1.25rem" data-action="go-upgrade">
+            <i class="fas fa-bolt"></i> Upgrade Plan
+          </button>
+        </div>
+
+        <!-- Edit form -->
+        <div class="profile-form-card">
+          <h3>Personal Information</h3>
+          <div style="height:1px;background:var(--bd);margin:.75rem 0 1.25rem"></div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="prof-name">Full name</label>
+              <input class="form-input" type="text" id="prof-name" placeholder="Your name"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prof-email">Email</label>
+              <input class="form-input" type="email" id="prof-email" placeholder="your@email.com" disabled style="opacity:.6"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prof-location">Location</label>
+              <input class="form-input" type="text" id="prof-location" placeholder="Calavi, Bénin"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prof-joined">Member since</label>
+              <input class="form-input" type="text" id="prof-joined" disabled style="opacity:.6"/>
+            </div>
+          </div>
+
+          <div style="margin-top:1.25rem;display:flex;gap:.75rem">
+            <button id="btn-save-profile" class="btn btn-jade"><i class="fas fa-floppy-disk"></i> Save changes</button>
+            <button id="btn-change-password" class="btn btn-ghost"><i class="fas fa-key"></i> Change password</button>
+          </div>
+
+          <div style="height:1px;background:var(--bd);margin:1.75rem 0"></div>
+          <h3>Danger Zone</h3>
+          <div style="margin-top:.75rem;display:flex;gap:.75rem;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" id="btn-logout">
+              <i class="fas fa-right-from-bracket"></i> Sign out of all devices
+            </button>
+          </div>
+        </div>
+      </div>
+    </main><!-- /page-profile -->
+
+    <!-- ── PAGE: ADMIN PANEL ── -->
+    <main class="page-main hidden" id="page-admin" role="main" aria-labelledby="admin-heading">
+      <div class="page-title-row">
+        <div class="page-title-block">
+          <div class="page-title" id="admin-heading">
+            <i class="fas fa-shield-halved" style="color:var(--rose)"></i> Admin Panel
+          </div>
+          <div class="page-subtitle">Manage users, payments and subscriptions.</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="Admin.init()"><i class="fas fa-rotate-right"></i> Refresh</button>
+      </div>
+
+      <div class="admin-warning" role="alert">
+        <i class="fas fa-triangle-exclamation"></i>
+        <span><strong>Admin area.</strong> Actions here directly affect user accounts. In production, this panel requires server-side authentication.</span>
+      </div>
+
+      <!-- Stats row -->
+      <div class="admin-stats-row" style="margin-bottom:1.5rem">
+        <div class="admin-stat">
+          <div class="as-val" id="admin-stat-users">0</div>
+          <div class="as-key">Total Users</div>
+        </div>
+        <div class="admin-stat">
+          <div class="as-val" id="admin-stat-premium" style="color:var(--jade)">0</div>
+          <div class="as-key">Premium Users</div>
+        </div>
+        <div class="admin-stat">
+          <div class="as-val" id="admin-stat-pending" style="color:var(--amber)">0</div>
+          <div class="as-key">Pending Payments</div>
+        </div>
+        <div class="admin-stat">
+          <div class="as-val" id="admin-stat-revenue" style="color:var(--jade)">0</div>
+          <div class="as-key">MRR (FCFA)</div>
+        </div>
+      </div>
+
+      <!-- Pending payments -->
+      <div class="chart-card" style="margin-bottom:1.5rem">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-hourglass-half" style="color:var(--amber)"></i> Pending Payment Approvals</div>
+          <span class="badge badge-amber" id="pending-count">0 pending</span>
+        </div>
+        <div id="pending-payments-list" class="pending-payments">
+          <!-- Filled by Admin.init() -->
+        </div>
+      </div>
+
+      <!-- All payments history -->
+      <div class="chart-card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-history" style="color:var(--sapphire)"></i> Payment History</div>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table" role="table" aria-label="Payment history">
+            <thead>
+              <tr>
+                <th scope="col">User</th>
+                <th scope="col">Reference</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody id="all-payments-tbody">
+              <!-- Filled by Admin.init() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- [MOMO_API] ── In production, this section would include:
+           - Webhook configuration for MTN payment status updates
+           - Automated payment approval on 'SUCCESSFUL' status
+           - Transaction log with MTN transaction IDs
+           - Reconciliation report
+      -->
+    </main><!-- /page-admin -->
+
+  </div><!-- /app-content -->
+</div><!-- /screen-app -->
+
+<!-- App JS -->
+<script src="app.js"></script>
+
+<!-- Fix profile display names after DOM load -->
+<script>
+  // Mirror prof-name → prof-display-name etc (convenience)
+  document.addEventListener('DOMContentLoaded', () => {
+    const dn = document.getElementById('prof-display-name');
+    const de = document.getElementById('prof-display-email');
+    const n  = document.getElementById('prof-name');
+    const e  = document.getElementById('prof-email');
+    if (n && dn) n.addEventListener('input', () => dn.textContent = n.value || '—');
+    if (e && de) de.textContent = e.value;
+  });
+
+  // Update payment ref reminder
+  document.addEventListener('DOMContentLoaded', () => {
+    const refCode = document.getElementById('payment-ref-code');
+    const reminder = document.getElementById('pay-ref-reminder');
+    if (refCode && reminder) {
+      const obs = new MutationObserver(() => { reminder.textContent = refCode.textContent; });
+      obs.observe(refCode, { childList: true, characterData: true, subtree: true });
+    }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</body>
+</html>
