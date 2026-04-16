@@ -1,5 +1,5 @@
 /**
- * TabsFlow SaaS — script.js
+ * TabsFlow SaaS — app.js
  * Complete frontend SaaS engine (localStorage mock backend)
  *
  * Architecture:
