@@ -25,8 +25,8 @@ Ce projet démontre mes compétences en :
 
 M_tabs/
 │── index.html
-│── style.css
-│── script.js
+│── app.css
+│── app.js
 
 ## 💡 Cas d’utilisation
 Ce composant peut être utilisé pour :
