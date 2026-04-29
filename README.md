@@ -9,7 +9,8 @@ Ce projet démontre mes compétences en :
 - JavaScript (DOM manipulation)
 
 ## 🚀 Démo en ligne
-👉 https://meresathindehou-prog.github.io/M_tabs/
+👉https://meresathindehou-prog.github.io/M_SmartabsUI/
+
 
 ## 🎯 Fonctionnalités
 - Navigation fluide entre onglets
